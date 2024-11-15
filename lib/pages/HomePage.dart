@@ -73,10 +73,10 @@ class _HomePageState extends State<HomePage> {
                     : kDisabledColor,
                 onPressed: () {
                   if (validationMessage == 'API Url is valid') {
-                    // network.getData();
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return const ProcessPage();
+                      // Передаємо екземпляр класу
+                      return ProcessPage(network: network);
                     }));
                   } else {
                     return null;
@@ -88,5 +88,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-//if (network.isValidUrl())

@@ -13,3 +13,5 @@ const TextStyle kDisabledStyle = TextStyle(color: Colors.black38);
 
 const TextStyle kNotValid = TextStyle(color: Colors.red);
 const TextStyle kValid = TextStyle(color: Colors.green);
+
+const TextStyle kProgresTextStyle = TextStyle(fontSize: 20);
