@@ -6,6 +6,7 @@ class WidthButton extends StatelessWidget {
   final TextStyle? buttonTextStyle;
   final IconData? buttonIcon;
   final VoidCallback? onPressed;
+  final Color? iconColor;
 
   const WidthButton({
     this.buttonColor,
@@ -13,6 +14,7 @@ class WidthButton extends StatelessWidget {
     this.buttonTextStyle,
     this.buttonIcon,
     this.onPressed,
+    this.iconColor = Colors.white,
     super.key,
   });
 
@@ -25,7 +27,7 @@ class WidthButton extends StatelessWidget {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        foregroundColor: Colors.white,
+        foregroundColor: iconColor,
         elevation: 6,
       ),
       onPressed: onPressed,
