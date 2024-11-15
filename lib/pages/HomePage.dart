@@ -15,6 +15,25 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   ApiService network = ApiService();
   String? validationMessage;
+  bool _isGetting = false;
+
+  Future<void> getTask() async {
+    if (validationMessage == 'API Url is valid') {
+      setState(() {
+        _isGetting = true;
+      });
+      await network.getData();
+      setState(() {
+        _isGetting = false;
+      });
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        // Передаємо екземпляр класу
+        return ProcessPage(network: network);
+      }));
+    } else {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                     hintText: 'Enter API URL',
                     onChanged: (valueUrl) {
                       setState(() {
-                        if (valueUrl.isEmpty) {
+                        if (valueUrl.isEmpty && valueUrl == '') {
                           validationMessage = null;
                           network.setUrl('');
                         } else if (network.isValidUrl(valueUrl)) {
@@ -60,28 +79,19 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               WidthButton(
-                buttonText: 'Start counting process',
+                buttonText:
+                    _isGetting ? 'Getting Task' : 'Start counting process',
                 buttonColor: (validationMessage == 'API Url is valid')
                     ? kActveButtonColor
                     : kDisabledButtonColor,
                 buttonTextStyle: (validationMessage == 'API Url is valid')
                     ? kActiveStyle
                     : kDisabledStyle,
-                buttonIcon: Icons.trending_flat,
+                buttonIcon: _isGetting ? null : Icons.trending_flat,
                 iconColor: (validationMessage == 'API Url is valid')
                     ? kActveColor
                     : kDisabledColor,
-                onPressed: () {
-                  if (validationMessage == 'API Url is valid') {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      // Передаємо екземпляр класу
-                      return ProcessPage(network: network);
-                    }));
-                  } else {
-                    return null;
-                  }
-                },
+                onPressed: getTask,
               )
             ],
           )),

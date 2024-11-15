@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webspark_test/constants/styles.dart';
+import 'package:webspark_test/pages/ResultListPage.dart';
 import 'package:webspark_test/services/ApiService.dart';
 import 'package:webspark_test/widgets/WidthButton.dart';
 
@@ -21,6 +22,7 @@ class _ProcessPageState extends State<ProcessPage>
   String _errorMessage = '';
   bool _isLoading = false;
   bool _isSuccess = false;
+  bool _isSending = false;
 
   @override
   void initState() {
@@ -41,6 +43,24 @@ class _ProcessPageState extends State<ProcessPage>
     _startAnimation();
   }
 
+  // Відправляєм результат
+  Future<void> _postResult() async {
+    _isSending = true;
+    setState(() {});
+
+    try {
+      if (_isSuccess) {
+        await widget.network!.postData();
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          // Передаємо екземпляр класу
+          return ResultListPage(network: widget.network!);
+        }));
+      } else {
+        null;
+      }
+    } catch (e) {}
+  }
+
   Future<void> _startAnimation() async {
     setState(() {
       _isLoading = true;
@@ -48,7 +68,7 @@ class _ProcessPageState extends State<ProcessPage>
     });
 
     try {
-      await widget.network!.getData();
+      await widget.network!.startAlgorithm();
       _controller.forward(); // Почати анімацію прогресу
 
       _controller.addListener(
@@ -67,16 +87,19 @@ class _ProcessPageState extends State<ProcessPage>
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _errorMessage = 'Error: $e';
+        _errorMessage = 'Error';
       });
     }
   }
 
-  String? showTextButton() {
+  // Варіанти подій для кнопки
+  String? showEventTextButton() {
     if (_isLoading) {
-      return 'Loaded';
+      return 'Calculations';
     } else if (!_isLoading && _isSuccess) {
       return 'Send result to server';
+    } else if (_isSending && !_isLoading && _isSuccess) {
+      return 'Loaded';
     } else {
       return _errorMessage;
     }
@@ -129,17 +152,15 @@ class _ProcessPageState extends State<ProcessPage>
                   ),
                 ),
                 WidthButton(
-                  buttonText: showTextButton(),
+                  buttonText: (_isSending && !_isLoading && _isSuccess)
+                      ? 'Loaded'
+                      : showEventTextButton(),
                   buttonIcon: _isSuccess ? Icons.trending_flat : null,
                   iconColor: _isSuccess ? kActveColor : kDisabledColor,
                   buttonColor:
                       _isSuccess ? kActveButtonColor : kDisabledButtonColor,
                   buttonTextStyle: _isSuccess ? kActiveStyle : kDisabledStyle,
-                  onPressed: () {
-                    if (_isSuccess) {
-                      print('click');
-                    }
-                  },
+                  onPressed: _postResult,
                 ),
               ],
             ),
