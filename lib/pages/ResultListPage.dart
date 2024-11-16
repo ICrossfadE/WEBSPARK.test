@@ -4,7 +4,7 @@ import 'package:webspark_test/models/result_model.dart';
 import 'package:webspark_test/pages/PreviewPage.dart';
 import 'package:webspark_test/services/ApiService.dart';
 
-class ResultListPage extends StatefulWidget {
+class ResultListPage extends StatelessWidget {
   final ApiService network;
   const ResultListPage({
     required this.network,
@@ -12,13 +12,8 @@ class ResultListPage extends StatefulWidget {
   });
 
   @override
-  State<ResultListPage> createState() => _ResultListPageState();
-}
-
-class _ResultListPageState extends State<ResultListPage> {
-  @override
   Widget build(BuildContext context) {
-    List<Result> items = widget.network.solutions;
+    List<Result> items = network.solutions;
 
     return Scaffold(
       appBar: AppBar(
@@ -39,10 +34,12 @@ class _ResultListPageState extends State<ResultListPage> {
               ),
               tileColor: Colors.black12,
               onTap: () {
-                print("click $index");
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   // Передаємо екземпляр класу
-                  return PreviewPage(indexPage: index);
+                  return PreviewPage(
+                    indexPage: index,
+                    network: network,
+                  );
                 }));
               },
             ),

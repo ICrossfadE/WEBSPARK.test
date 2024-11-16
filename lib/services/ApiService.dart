@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:webspark_test/models/result_model.dart';
-import 'package:webspark_test/utils/AlgoritmMixin.dart';
+import 'package:webspark_test/utils/algoritmMixin.dart';
 
 import 'package:webspark_test/models/coordinates_model.dart';
 

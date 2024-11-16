@@ -15,3 +15,9 @@ const TextStyle kNotValid = TextStyle(color: Colors.red);
 const TextStyle kValid = TextStyle(color: Colors.green);
 
 const TextStyle kProgresTextStyle = TextStyle(fontSize: 20);
+
+const Color kStartPathColor = Color(0xF064FFDA);
+const Color kEndPathColor = Color(0xF0009688);
+const Color kBlokedPathColor = Color(0xF0000000);
+const Color kShortPathColor = Color(0xF04CAF50);
+const Color kEmptyPathColor = Color(0xFFFFFFFF);
