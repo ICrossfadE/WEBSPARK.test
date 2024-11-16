@@ -45,12 +45,16 @@ class _ProcessPageState extends State<ProcessPage>
 
   // Відправляєм результат
   Future<void> _postResult() async {
-    _isSending = true;
-    setState(() {});
+    setState(() {
+      _isSending = true;
+    });
 
     try {
       if (_isSuccess) {
         await widget.network!.postData();
+        setState(() {
+          _isSending = false;
+        });
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           // Передаємо екземпляр класу
           return ResultListPage(network: widget.network!);
@@ -98,8 +102,6 @@ class _ProcessPageState extends State<ProcessPage>
       return 'Calculations';
     } else if (!_isLoading && _isSuccess) {
       return 'Send result to server';
-    } else if (_isSending && !_isLoading && _isSuccess) {
-      return 'Loaded';
     } else {
       return _errorMessage;
     }
@@ -153,7 +155,7 @@ class _ProcessPageState extends State<ProcessPage>
                 ),
                 WidthButton(
                   buttonText: (_isSending && !_isLoading && _isSuccess)
-                      ? 'Loaded'
+                      ? 'Loading'
                       : showEventTextButton(),
                   buttonIcon: _isSuccess ? Icons.trending_flat : null,
                   iconColor: _isSuccess ? kActveColor : kDisabledColor,
